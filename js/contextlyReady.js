@@ -1,0 +1,1 @@
+Contextly.ready('widgets');

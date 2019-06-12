@@ -1,0 +1,63 @@
+contextly.settings:
+  path: '/admin/config/content/contextly/settings'
+  defaults:
+    _form: '\Drupal\contextly\Form\ContextlyAdminForm'
+    _title: 'Contextly Admin'
+  requirements:
+    _permission: 'access administration pages'
+  options:
+    _admin_route: TRUE
+
+contextly.contextly_node_types_admin_form:
+  path: '/admin/config/content/contextly/node-types'
+  defaults:
+    _form: '\Drupal\contextly\Form\ContextlyNodeTypesAdminForm'
+    _title: 'Contextly Node Types'
+  requirements:
+    _permission: 'access administration pages'
+  options:
+    _admin_route: TRUE
+
+contextly.admin_controller_cp_tour:
+  path: '/admin/config/content/contextly/cp-tour'
+  defaults:
+    _controller: '\Drupal\contextly\Controller\AdminController::cpTour'
+    _title: 'Cp Tour'
+  requirements:
+    _permission: 'access content'
+
+contextly.admin_controller_set_api_key:
+  path: '/admin/config/content/contextly/set-api-key'
+  defaults:
+    _controller: '\Drupal\contextly\Controller\AdminController::setApiKey'
+    _title: 'Set Api Key'
+  requirements:
+    _permission: 'access content'
+
+route_callbacks:
+  - '\Drupal\contextly\Routing\ConditionalRoutes::routes'
+
+contextly.contextly_ajax_editor_request_controller_request:
+  path: '/contextly-ajax/{request}/{node}'
+  defaults:
+    _controller: '\Drupal\contextly\Controller\ContextlyAjaxEditorRequestController::request'
+    _title: 'Request'
+  requirements:
+    _permission: 'access content'
+  options:
+    parameters:
+      node:
+        type: entity:node
+
+contextly.contextly_ajax_editor_request_controller_snippet:
+  path: '/contextly-editor/{mode}/{node}'
+  defaults:
+    _controller: '\Drupal\contextly\Controller\ContextlyAjaxEditorRequestController::handle'
+    _title: 'Mode'
+    mode: 'snippet'
+  requirements:
+    _permission: 'access content'
+  options:
+    parameters:
+      node:
+        type: entity:node

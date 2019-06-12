@@ -1,0 +1,7 @@
+contextly.contextly_admin_form:
+  title: 'Contextly'
+  route_name: contextly.settings
+  description: 'Administer Contextly Integration'
+  parent: system.admin_config_content
+  weight: 99
+

@@ -1,0 +1,14 @@
+{
+  "name": "drupal/contextly",
+  "type": "drupal-module",
+  "description": "Contextly module",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "homepage": "https://www.drupal.org/project/contextly",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/contextly",
+    "source": "http://cgit.drupalcode.org/contextly"
+  },
+  "require": { }
+}

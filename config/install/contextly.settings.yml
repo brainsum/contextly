@@ -1,0 +1,4 @@
+contextly:
+  api_key: ""
+  kit_cdn: 1
+  server_mode: "dev"

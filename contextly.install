@@ -1,0 +1,59 @@
+<?php
+
+/**
+ * @file contextly.install
+ *
+ * @author: dj 
+ * created: 2019.03.15. - 8:28:41
+ *
+ * Contains contextly install hooks.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function contextly_schema() {
+  $schema = [];
+
+  $schema['contextly_node_settings'] = [
+    'description' => 'Settings for each node revision.',
+    'fields' => [
+      'nid' => [
+        'description' => 'Node identifier.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'vid' => [
+        'description' => 'Node revision identifier.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'disabled' => [
+        'description' => 'Non-zero value means all Contextly widgets will be disabled on the node revision.',
+        'type' => 'int',
+        'size' => 'tiny',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+    ],
+    'primary key' => ['vid'],
+    'indexes' => [
+      'nid_vid' => ['nid', 'vid'],
+    ],
+    'foreign keys' => [
+      'node_revision' => [
+        'table' => 'node_revision',
+        'columns' => ['vid' => 'vid'],
+      ],
+      'node' => [
+        'table' => 'node',
+        'columns' => ['nid' => 'nid'],
+      ],
+    ],
+  ];
+
+  return $schema;
+}

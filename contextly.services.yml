@@ -1,0 +1,15 @@
+services:
+  contextly.meta_generator:
+    class: Drupal\contextly\MetaGenerator
+    parent: container.trait
+
+  contextly.widgets:
+    class: Drupal\contextly\ContextlyWidgets
+
+  contextly.base:
+    class: Drupal\contextly\ContextlyBaseService
+    parent: container.trait
+
+  contextly.library:
+    class: Drupal\contextly\ContextlyLibraryService
+    parent: container.trait

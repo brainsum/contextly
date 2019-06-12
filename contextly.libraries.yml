@@ -1,0 +1,65 @@
+contextly.head:
+  header: TRUE
+  version: 1.0.0
+  js:
+    js/contextlyHeadMin.js: {minified: true, attributes: {assync: TRUE}}
+  dependencies:
+    - core/jquery
+
+contextly.ready:
+  version: 0.1.0
+  js:
+    js/contextlyReady.js: {}
+  dependencies:
+    - contextly/contextly.head
+
+editor:
+  version: '1.0'
+  js:
+    js/contextly-editor.js: {minified: false, attributes: {assync: TRUE}}
+  dependencies:
+    - contextly/editor-overlay
+    - core/jquery
+    - core/drupalSettings
+
+node-view:
+  js:
+    js/contextly-node-view.js: {}
+  dependencies:
+    - core/drupalSettings
+
+editor-overlay:
+  version: '2.7'
+  css:
+    base:
+      http://contextlysitescripts.contextly.com/kit/assets/2.7/overlay-dialogs--overlay.css: { type: external }
+  js:
+    http://contextlysitescripts.contextly.com/kit/assets/2.7/overlay-dialogs--overlay.js: { type: external }
+  dependencies:
+    - system/jquery
+
+easy-xdm:
+  version: '2.7'
+  js:
+    http://contextlysitescripts.contextly.com/kit/assets/2.7/libraries--easy-xdm.js:
+      - type: inline
+      - data: 'easyXDM.DomHelper.requiresJSON("http:\/\/contextlysitescripts.contextly.com\/kit\/assets\/2.7\/libraries--json2.js");'
+
+widget:
+  version: '2.7'
+  css:
+    http://contextlysitescripts.contextly.com/kit/assets/2.7/widgets--page-view.css: {}
+  js:
+    http://contextlysitescripts.contextly.com/kit/assets/2.7/widgets--page-view.js: {}
+  dependencies:
+    - system/jquery
+    - contextly/easy-xdm
+
+node-form:
+  version: 1.0.0
+  js:
+    js/contextly-node-form.js: {minified: false, attributes: {assync: TRUE}}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings
+

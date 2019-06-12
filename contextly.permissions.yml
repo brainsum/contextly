@@ -1,0 +1,7 @@
+
+administer contextly:
+  title: 'Administer Contextly settings'
+  description: 'Change API keys, modify Contextly-enabled node types, etc.'
+manage contextly links:
+  title: 'Manage Contextly links and sidebars'
+  description: 'Add and remove related posts, sidebars, etc.'

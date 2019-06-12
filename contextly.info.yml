@@ -1,0 +1,5 @@
+name: 'Contextly'
+type: module
+description: 'Contextly service integration.'
+core: 8.x
+package: 'Other'
