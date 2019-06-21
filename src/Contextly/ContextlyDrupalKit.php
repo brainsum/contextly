@@ -32,7 +32,7 @@ use Drupal\node\NodeInterface;
 class ContextlyDrupalKit extends ContextlyKit {
 
   // @todo: remove if field is exist on admin form.
-  const KIT_PATH = '/../vendor/contextly';
+  const KIT_PATH = '/libraries/contextly';
 
   /**
    * @return ContextlyDrupalKit

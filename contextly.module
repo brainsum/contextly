@@ -103,70 +103,13 @@ function contextly_node_delete(EntityInterface $node) {
 }
 
 /**
- * Implements hook_entity_extra_field_info().
+ * Implements hook_library_info_build().
  */
-function contextly_entity_extra_field_info() {
-  /** @var \Drupal\contextly\ContextlyBaseServiceInterface $contextly_base */
-  $contextly_base = \Drupal::service('contextly.base');
-
-  $extra = [];
-
-  foreach (array_keys($contextly_base->getEnabledTypes()) as $bundle) {
-    $extra['node'][$bundle]['display']['contextly_widget'] = [
-      'label' => t('Contextly widget'),
-      'description' => t('Widget displaying the list of related posts and links. Visible on the full node view only.'),
-      'weight' => 0,
-      'visible' => TRUE,
-    ];
-  }
-
-  return $extra;
-}
-
-/**
- * Implements hook_node_view().
- */
-function contextly_node_view(array &$build,
-  EntityInterface $entity,
-  EntityViewDisplayInterface $display,
-  $view_mode) {
-
-  /** @var \Drupal\contextly\ContextlyBaseServiceInterface $contextly_base */
-  $contextly_base = \Drupal::service('contextly.base');
-  $contextly_base->contextlyNodeView($build, $entity, $display, $view_mode);
-}
-
-
 function contextly_library_info_build() {
   return [];
   /** @var \Drupal\contextly\ContextlyBaseServiceInterface $contextly_base */
   $contextly_base = \Drupal::service('contextly.base');
 }
-
-/**
- * Implements hook_node_load().
- *//*
-function contextly_node_load($nodes,
-  $types) {
-  // @todo: figure out this needs or not.
-  return;
-  // Re-map nodes by revision ID.
-  $revisions = array();
-  foreach ($nodes as $node) {
-    $revisions[$node->vid] = $node;
-  }
-
-  $result = db_select('contextly_node_settings', 'cns')
-    ->fields('cns', array('vid', 'disabled'))
-    ->condition('vid', array_keys($revisions))
-    ->execute();
-
-  // Add our extra data to the node objects.
-  foreach ($result as $record) {
-    $revisions[$record->vid]->contextly_disabled = $record->disabled;
-  }
-}
-*/
 
 /**
  * Implements hook_form_FORM_ID_alter() for node_form().
@@ -253,4 +196,3 @@ function contextly_form_node_form_alter(&$form, FormStateInterface $form_state) 
     '#weight' => $weight,
   );
 }
-

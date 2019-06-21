@@ -38,6 +38,33 @@ INSTALLATION
 Install the contextly module as you would normally install a contributed Drupal
 module. Visit https://www.drupal.org/node/1897420 for further information.
 
+Drupal 8.x-2.x
+1. Download contextly kit from http://contextlysitescripts.contextly.com/kit/releases/contextly-kit-2.7.tar.gz
+2. Unpack it.
+3. Create contextly folder in Drupal root folder.
+4. Move or copy config and server folders to above created folder.
+5. Add classmap to Drupal root composer.json:
+```json
+    "autoload": {
+        "classmap": [
+            "vendor/contextly/server/"
+        ]
+    },
+```
+
+If not empty the autoload section just add the "vendor/contextly/server/" line:
+```json
+    "autoload": {
+        "classmap": [
+            "scripts/composer/ScriptHandler.php",
+            "vendor/contextly/server/"
+        ],
+        "files": ["load.environment.php"]
+    },
+```
+6. Run composer command: composer dumpautoload
+7. Create contextly folder in document root libraries folder.
+8. Move or copy client and console folders to above created contextly folder.
 
 CONFIGURATION
 --------------
