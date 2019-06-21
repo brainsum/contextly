@@ -89,7 +89,7 @@ class ContextlyDrupalKit extends ContextlyKit {
 
   function buildFileUrl($filepath) {
     // @todo: prepare field on admin form for library folder.
-    return file_create_url(DRUPAL_ROOT . $this::KIT_PATH . '/' . $filepath);
+    return file_create_url($this::KIT_PATH . '/' . $filepath);
   }
 
 }
