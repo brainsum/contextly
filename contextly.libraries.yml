@@ -2,7 +2,7 @@ contextly.head:
   header: TRUE
   version: 1.0.0
   js:
-    js/contextlyHeadMin.js: {minified: true, attributes: {assync: TRUE}}
+    js/contextlyHeadMin.js: {minified: true, attributes: {async: TRUE}}
   dependencies:
     - core/jquery
 
@@ -16,7 +16,7 @@ contextly.ready:
 editor:
   version: '1.0'
   js:
-    js/contextly-editor.js: {minified: false, attributes: {assync: TRUE}}
+    js/contextly-editor.js: {minified: false, attributes: {async: TRUE}}
   dependencies:
     - contextly/editor-overlay
     - core/jquery
@@ -58,7 +58,7 @@ widget:
 node-form:
   version: 1.0.0
   js:
-    js/contextly-node-form.js: {minified: false, attributes: {assync: TRUE}}
+    js/contextly-node-form.js: {minified: false, attributes: {async: TRUE}}
   dependencies:
     - core/jquery
     - core/drupalSettings
