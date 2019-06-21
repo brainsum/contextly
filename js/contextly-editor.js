@@ -281,8 +281,8 @@
    */
   Drupal.behaviors.contextlyEditor = {
     attach: function(context, settings) {
-       Contextly.editor.loadSettings();
-      $('body', context).once('contextly-editor', function() {
+      // Contextly.editor.loadSettings();
+      $('body', context).once('contextly-editor').each(function() {
         Contextly.editor.loadSettings();
       });
     }

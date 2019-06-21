@@ -5,6 +5,7 @@
       $('fieldset#edit-contextly', context)
         .once('contextly-drupal-summary')
         .drupalSetSummary(function(context) {
+          console.log('another');
           var vals = [];
 
           var disabled = $('input[name="contextly_disabled"]', context).is(':checked');
@@ -29,6 +30,7 @@
 
       // Apply buttons state depending on editor state.
       if (Contextly.editor.isLoaded) {
+        console.log('settings loaded');
         this.onSettingsLoaded();
       }
       else if (Contextly.editor.hasFailed) {
@@ -48,9 +50,9 @@
     },
 
     getButtonLabel: function() {
-      var hasLinks = Drupal.settings.contextlyEditor
-        && Drupal.settings.contextlyEditor.snippet
-        && Drupal.settings.contextlyEditor.snippet.links;
+      var hasLinks = drupalSettings.contextlyEditor
+        && drupalSettings.contextlyEditor.snippet
+        && drupalSettings.contextlyEditor.snippet.links;
       if (hasLinks) {
         return Drupal.t('Edit Related Posts');
       }
@@ -108,7 +110,7 @@
         return;
       }
 
-      $('body', context).once('d-ctx-snippet-edit', this.proxy(function() {
+      $('body', context).once('d-ctx-snippet-edit').each(this.proxy(function() {
         $(window).bind({
           contextlySettingsLoading: this.proxy(this.onSettingsLoading),
           contextlySettingsLoaded: this.proxy(this.onSettingsLoaded),
