@@ -41,7 +41,7 @@ module. Visit https://www.drupal.org/node/1897420 for further information.
 Drupal 8.x-2.x
 1. Download contextly kit from http://contextlysitescripts.contextly.com/kit/releases/contextly-kit-2.7.tar.gz
 2. Unpack it.
-3. Create contextly folder in Drupal root folder.
+3. Create contextly folder in Drupal root vendor folder.
 4. Move or copy config and server folders to above created folder.
 5. Add classmap to Drupal root composer.json:
 ```json
