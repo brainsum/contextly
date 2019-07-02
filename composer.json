@@ -10,18 +10,26 @@
     "issues": "https://www.drupal.org/project/issues/contextly",
     "source": "http://cgit.drupalcode.org/contextly"
   },
-  "require": { },
+  "config": {
+    "vendor-dir": "web/libraries"
+  },
   "repositories": [
     {
-      "name": "contextly/contextly-kit",
-      "version": "0.1.0",
-      "dist": {
-        "url": "http://contextlysitescripts.contextly.com/kit/releases/contextly-kit-2.7.tar.gz",
-        "type": "tar"
+      "type": "package",
+      "package": {
+        "name": "contextly/contextly-kit",
+        "version": "0.1.0",
+        "dist": {
+          "url": "http://contextlysitescripts.contextly.com/kit/releases/contextly-kit-2.7.tar.gz",
+          "type": "tar"
+        },
+        "autoload": {
+          "classmap": ["server/"]
+        }
       }
     }
   ],
-  "config": {
-    "vendor-dir": "web/libraries"
+  "require": {
+    "contextly/contextly-kit": "0.1.*"
   }
 }
