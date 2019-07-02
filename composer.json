@@ -10,17 +10,16 @@
     "issues": "https://www.drupal.org/project/issues/contextly",
     "source": "http://cgit.drupalcode.org/contextly"
   },
-  "config": {
-    "vendor-dir": "web/libraries"
-  },
+  "config": { },
   "repositories": [
     {
       "type": "package",
       "package": {
         "name": "contextly/contextly-kit",
         "version": "0.1.0",
+        "type": "drupal-library",
         "dist": {
-          "url": "http://contextlysitescripts.contextly.com/kit/releases/contextly-kit-2.7.tar.gz",
+          "url": "https://contextlysitescripts.contextly.com/kit/releases/contextly-kit-2.7.tar.gz",
           "type": "tar"
         },
         "autoload": {
