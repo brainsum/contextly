@@ -55,7 +55,7 @@ class ContextlyDrupalKit extends ContextlyKit {
   public static function getDefaultSettings() {
     $config = new ContextlyKitSettings();
     $drupal_config = \Drupal::service('config.factory')
-      ->get('contextly.contextlyadmin');
+      ->get('contextly.settings');
     $config->cdn = (bool) $drupal_config->get('kit_cdn');
     $config->mode = $drupal_config->get('server_mode');
 

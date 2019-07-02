@@ -207,7 +207,7 @@ class ContextlyBaseService implements ContextlyBaseServiceInterface, ContainerAw
     $secure = TRUE): string {
     $scheme = $secure ? 'https:' : 'http:';
     $server_mode = $this->container->get('config.factory')
-        ->get('contextly.contextlyadmin')->get('server_mode') ?: 'dev';
+        ->get('contextly.settings')->get('server_mode') ?: 'dev';
     $servers = $this->contextlyServers($scheme);
     if (!empty($servers[$server_mode][$server_type])) {
       return $servers[$server_mode][$server_type];
@@ -294,6 +294,10 @@ class ContextlyBaseService implements ContextlyBaseServiceInterface, ContainerAw
   public function isNodeTypeEnabled(string $type_name): bool {
     $config = $this->container->get('config.factory')
       ->get('contextly.contextlynodetypesadmin');
+
+    // @todo: Config form prepare for this variables.
+    return TRUE;
+
     if ($config->get('contextly_all_node_types')) {
       return TRUE;
     }
