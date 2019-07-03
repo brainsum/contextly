@@ -39,7 +39,7 @@ class ContextlyAdminForm extends ConfigFormBase implements ContainerAwareInterfa
     FormStateInterface $form_state) {
     $config = $this->config('contextly.settings');
     $key = $config->get('api_key');
-dsm($key);
+
     /** @var \Drupal\Core\Access\CsrfTokenGenerator $token_generator */
     $token_generator = $this->container->get('csrf_token');
     $settings_token = $this->container->get('contextly.base')

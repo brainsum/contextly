@@ -1,0 +1,9 @@
+# Schema for Contextly module configuration.
+
+contextly.contextly_node_types_admin:
+  type: config_object
+  label: 'Contextly node types settings'
+  mapping:
+    contextly_all_node_types:
+      type: boolean
+      label: 'All node type'

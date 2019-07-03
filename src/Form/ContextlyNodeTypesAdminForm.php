@@ -15,7 +15,7 @@ class ContextlyNodeTypesAdminForm extends ConfigFormBase {
    */
   protected function getEditableConfigNames() {
     return [
-      'contextly.contextlynodetypesadmin',
+      'contextly.contextly_node_types_admin',
     ];
   }
 
@@ -31,7 +31,7 @@ class ContextlyNodeTypesAdminForm extends ConfigFormBase {
    */
   public function buildForm(array $form,
     FormStateInterface $form_state) {
-    $config = $this->config('contextly.contextlynodetypesadmin');
+    $config = $this->config('contextly.contextly_node_types_admin');
 
     $types = node_type_get_names();
 
@@ -88,7 +88,7 @@ class ContextlyNodeTypesAdminForm extends ConfigFormBase {
     FormStateInterface $form_state) {
     parent::submitForm($form, $form_state);
 
-    $this->config('contextly.contextlynodetypesadmin')
+    $this->config('contextly.contextly_node_types_admin')
       ->set('contextly_all_node_types', $form_state->getValue('contextly_all_node_types'))
       ->set('contextly_node_types', $form_state->getValue('contextly_node_types'))
       ->save();

@@ -7,3 +7,9 @@ contextly.settings:
     api_key:
       type: string
       label: 'API key'
+    kit_cdn:
+      type: boolean
+      label: 'Contextly CDN'
+    server_mode:
+      type: string
+      label: 'Server mode'
