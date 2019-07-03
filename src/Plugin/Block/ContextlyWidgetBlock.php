@@ -5,7 +5,9 @@ namespace Drupal\contextly\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Access\AccessResult;
 
 /**
  * Provides a 'ContextlyWidgetBlock' block.
@@ -71,6 +73,25 @@ class ContextlyWidgetBlock extends BlockBase implements ContainerFactoryPluginIn
       $plugin_definition,
       $container
     );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function access(AccountInterface $account,
+    $return_as_object = FALSE) {
+    $route_match = \Drupal::service('current_route_match');
+    if ($route_match->getRouteName() === 'entity.node.canonical' &&
+      $node = $route_match->getParameter('node')) {
+      /** @var \Drupal\contextly\ContextlyBaseServiceInterface $base_service */
+      $base_service = \Drupal::service('contextly.base');
+      if ($base_service->nodeContextlyIsDisabled($node)) {
+        // Node has not access to contextly.
+        return AccessResult::forbidden();
+      }
+    }
+
+    return parent::access($account, $return_as_object);
   }
 
   /**

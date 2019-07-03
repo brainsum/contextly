@@ -5,11 +5,9 @@
  * Contains contextly.module.
  */
 
-use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
-use Drupal\contextly\Contextly\ContextlyDrupalKit;
+use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
 
 /**
  * Implements hook_page_attachments().
@@ -20,6 +18,14 @@ function contextly_page_attachments(array &$page) {
   $route_match = \Drupal::service('current_route_match');
   if ($route_match->getRouteName() === 'entity.node.canonical' &&
     $node = $route_match->getParameter('node')) {
+
+    /** @var \Drupal\contextly\ContextlyBaseServiceInterface $base_service */
+    $base_service = \Drupal::service('contextly.base');
+    if ($base_service->nodeContextlyIsDisabled($node)) {
+      // Node is excluded from contextly.
+      return;
+    }
+
     $meta_generator = \Drupal::service('contextly.meta_generator');
     $meta_generator->createMetaTags($node);
 
@@ -43,10 +49,13 @@ function contextly_page_attachments(array &$page) {
  */
 function contextly_preprocess_page(array &$variables) {
   if (\Drupal::routeMatch()->getRouteName() === 'entity.node.canonical' &&
-    !empty($variables['node']) &&
-    $variables['node']->bundle() === 'article') {
-    $variables['#attached']['library'][] = 'contextly/contextly.head';
-    $variables['#attached']['library'][] = 'contextly/contextly.ready';
+    !empty($variables['node'])) {
+    /** @var \Drupal\contextly\ContextlyBaseServiceInterface $base_service */
+    $base_service = \Drupal::service('contextly.base');
+    if (!$base_service->nodeContextlyIsDisabled($variables['node'])) {
+      $variables['#attached']['library'][] = 'contextly/contextly.head';
+      $variables['#attached']['library'][] = 'contextly/contextly.ready';
+    }
   }
 }
 
@@ -68,47 +77,29 @@ function contextly_theme() {
 }
 
 /**
- * Implements hook_node_update().
+ * Implements hook_entity_base_field_info().
  */
-function contextly_node_update(EntityInterface $node) {
-  /** @var \Drupal\contextly\ContextlyBaseServiceInterface $contextly_base */
-  $contextly_base = \Drupal::service('contextly.base');
-  $contextly_base->nodeChanged($node);
-  $contextly_base->saveNodeRevisionSettings($node);
+function contextly_entity_base_field_info(EntityTypeInterface $entity_type) {
+  if ($entity_type->id() === 'node') {
+    $fields['contextly_disabled'] = _contextly_get_disabled_field_definition();
+
+    return $fields;
+  }
 }
 
 /**
- * Implements hook_node_insert().
+ * Return the base field definition for contextly disable field.
+ *
+ * @return \Drupal\Core\Field\BaseFieldDefinition
+ *   The base field definition.
  */
-function contextly_node_insert(EntityInterface $node) {
-  contextly_node_update($node);
-}
-
-/**
- * Implements hook_node_revision_delete().
- */
-function contextly_node_revision_delete(EntityInterface $node) {
-  /** @var \Drupal\Core\Database\Query\Delete $query */
-  $query = \Drupal::service('database')->delete('contextly_node_settings');
-  $query->condition('vid', $node->getRevisionId())->execute();
-}
-
-/**
- * Implements hook_node_delete().
- */
-function contextly_node_delete(EntityInterface $node) {
-  /** @var \Drupal\Core\Database\Query\Delete $query */
-  $query = \Drupal::service('database')->delete('contextly_node_settings');
-  $query->condition('nid', $node->id())->execute();
-}
-
-/**
- * Implements hook_library_info_build().
- */
-function contextly_library_info_build() {
-  return [];
-  /** @var \Drupal\contextly\ContextlyBaseServiceInterface $contextly_base */
-  $contextly_base = \Drupal::service('contextly.base');
+function _contextly_get_disabled_field_definition() {
+  return BaseFieldDefinition::create('boolean')
+      ->setLabel(t('Contextly disable'))
+      ->setDescription(t('The contextly disable flag.'))
+      ->setReadOnly(TRUE)
+      ->setRevisionable(TRUE)
+      ->setTranslatable(FALSE);
 }
 
 /**
@@ -117,31 +108,38 @@ function contextly_library_info_build() {
  * Adds edit elements to the node edit form.
  */
 function contextly_form_node_form_alter(&$form, FormStateInterface $form_state) {
-  //dsm($form);
-    /** @var \Drupal\Core\Entity\EntityForm $form_object */
+  /** @var \Drupal\Core\Entity\EntityForm $form_object */
   $form_object = $form_state->getFormObject();
+
   /** @var \Drupal\node\NodeInterface $node */
   $node = $form_object->getEntity();
+
   if ($node->isNew()) {
-    // @todo: message form after build.
+    // For now we support node edit only.
+    // Instead of showing the message now we add after build handler to check
+    // if the form was submitted and show the message if it wasn't. We can't do
+    // it here, because "process_input" form state variable is not set yet.
+    $form['#after_build'][] = '_contextly_create_node_form_after_build';
+    return;
+  }
+
+  $has_access = \Drupal::currentUser()->hasPermission('manage contextly links');
+  // Stop at this point if user has no access.
+  if (!$has_access) {
     return;
   }
 
   /** @var \Drupal\contextly\ContextlyBaseServiceInterface $base_service */
   $base_service = \Drupal::service('contextly.base');
+  if (!$base_service->isNodeTypeEnabled($node->bundle())) {
+    return;
+  }
   
   // Make sure that API key is set.
   $key = $base_service->getApiKey();
   if (empty($key)) {
     return;
   }
-
-  // Check if node type is enabled.
-  //if (!_contextly_is_node_type_enabled($node->type)) {
-  //  return;
-  //}
-
-  //$has_access = user_access('manage contextly links');
 
   // Add per-post settings (even if user has no access to edit links).
   $form['contextly'] = array(
@@ -154,36 +152,39 @@ function contextly_form_node_form_alter(&$form, FormStateInterface $form_state) 
     '#weight' => 50,
     '#attached' => [
       'library' => ['contextly/node-form'],
-      //'drupalSettings' => \Drupal::service('contextly.base')
-      //    ->getSettings($node),
     ],
   );
+
   $form['contextly']['contextly_disabled'] = array(
   '#type' => 'checkbox',
     '#disabled' => !$has_access,
     '#title' => t('Disable the recommendation module and all sidebars on this node'),
-    '#default_value' => !empty($node->contextly_disabled),
+    '#default_value' => !empty($node->contextly_disabled->value),
   );
 
   $form['contextly']['contextly_snippet_edit'] = array(
     '#theme' => 'contextly_node_edit',
   );
 
-  // Stop at this point if user has no access.
-  //if (!$has_access) {
-    //return;
-  //}
-
-  // For now we support node edit only.
-  if (empty($node->nid)) {
-    // Instead of showing the message now we add after build handler to check
-    // if the form was submitted and show the message if it wasn't. We can't do
-    // it here, because "process_input" form state variable is not set yet.
-    $form['#after_build'][] = '_contextly_create_node_form_after_build';
-    return;
-  }
-
   $form['#attached']['library'][] = 'contextly/editor';
   $form['#attached']['drupalSettings'] = $base_service->getSettings($node);
+}
 
+/**
+ * Callback function.
+ *
+ * @param array $form
+ *   The form array.
+ * @param FormStateInterface $form_state
+ *   The form state object.
+ *
+ * @return array
+ *   The form array.
+ */
+function _contextly_create_node_form_after_build(&$form, FormStateInterface $form_state) {
+  if (!$form_state->isProgrammed() && !$form_state->isProcessingInput()) {
+    drupal_set_message(t('Save the node to be able to manage the Contextly links.'), 'warning', FALSE);
+  }
+
+  return $form;
 }

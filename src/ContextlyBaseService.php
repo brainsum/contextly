@@ -249,15 +249,11 @@ class ContextlyBaseService implements ContextlyBaseServiceInterface, ContainerAw
    * {@inheritdoc}
    */
   public function nodeContextlyIsDisabled(EntityInterface $node): bool {
-    /** @var \Drupal\Core\Database\Query\SelectInterface $query */
-    $query = $this->container->get('database')
-      ->select('contextly_node_settings', 'cns');
-    $query->fields('cns', ['disabled'])
-      ->condition('cns.nid', $node->id())
-      ->condition('cns.vid', $node->getRevisionId());
-    $result = $query->execute()->fetchField();
+    if ($this->isNodeTypeEnabled($node->bundle())) {
+      return !empty($node->contextly_disabled->value);
+    }
 
-    return empty($result);
+    return TRUE;
   }
 
   /**
@@ -293,10 +289,7 @@ class ContextlyBaseService implements ContextlyBaseServiceInterface, ContainerAw
    */
   public function isNodeTypeEnabled(string $type_name): bool {
     $config = $this->container->get('config.factory')
-      ->get('contextly.contextlynodetypesadmin');
-
-    // @todo: Config form prepare for this variables.
-    return TRUE;
+      ->get('contextly.contextly_node_types_admin');
 
     if ($config->get('contextly_all_node_types')) {
       return TRUE;
@@ -386,7 +379,7 @@ class ContextlyBaseService implements ContextlyBaseServiceInterface, ContainerAw
    */
   public function getEnabledTypes() {
     $config = $this->container->get('config.factory')
-      ->get('contextly.contextlynodetypesadmin');
+      ->get('contextly.contextly_node_types_admin');
     $all = $config->get('contextly_all_node_types');
     if ($config->get('contextly_all_node_types')) {
       return array_keys(node_type_get_types());
