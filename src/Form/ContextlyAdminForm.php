@@ -6,7 +6,6 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url;
 use Drupal\Core\Link;
 
 /**
@@ -130,7 +129,6 @@ class ContextlyAdminForm extends ConfigFormBase implements ContainerAwareInterfa
    */
   public function submitForm(array &$form,
     FormStateInterface $form_state) {
-    dsm($form_state->getTriggeringElement());
     switch ($form_state->getTriggeringElement()['#id']) {
       case 'edit-submit':
         parent::submitForm($form, $form_state);
