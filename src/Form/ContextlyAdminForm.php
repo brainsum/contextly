@@ -92,12 +92,6 @@ dsm($key);
       '#default_value' => $config->get('server_mode'),
     ];
 
-    $form['module']['save'] = [
-      '#type' => 'submit',
-      '#value' => t('Save configuration'),
-      '#name' => 'save',
-    ];
-
     $form['service'] = [
       '#type' => 'details',
       '#title' => $this->t('Service settings'),
@@ -136,8 +130,9 @@ dsm($key);
    */
   public function submitForm(array &$form,
     FormStateInterface $form_state) {
-    switch ($form_state->getTriggeringElement()['#name']) {
-      case 'save':
+    dsm($form_state->getTriggeringElement());
+    switch ($form_state->getTriggeringElement()['#id']) {
+      case 'edit-submit':
         parent::submitForm($form, $form_state);
         $this->config('contextly.settings')
           ->set('api_key', $form_state->getValue('api_key'))
@@ -148,7 +143,7 @@ dsm($key);
         $this->container->get('contextly.base')->settingsResetSharedToken();
         break;
 
-      case 'go':
+      case 'edit-go':
         // Redirects to Contextly service settings page.
         return $this->container->get('contextly.base')->settingsUrl('settings');
         break;

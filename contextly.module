@@ -117,6 +117,7 @@ function contextly_library_info_build() {
  * Adds edit elements to the node edit form.
  */
 function contextly_form_node_form_alter(&$form, FormStateInterface $form_state) {
+  //dsm($form);
     /** @var \Drupal\Core\Entity\EntityForm $form_object */
   $form_object = $form_state->getFormObject();
   /** @var \Drupal\node\NodeInterface $node */
@@ -144,11 +145,12 @@ function contextly_form_node_form_alter(&$form, FormStateInterface $form_state) 
 
   // Add per-post settings (even if user has no access to edit links).
   $form['contextly'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
+    '#group' => 'advanced',
+    '#attributes' => [
+      'class' => ['node-form-contextly'],
+    ],
     '#title' => t('Contextly widgets'),
-    '#collapsible' => TRUE,
-    '#collapsed' => TRUE,
-    '#group' => 'additional_settings',
     '#weight' => 50,
     '#attached' => [
       'library' => ['contextly/node-form'],
@@ -156,12 +158,16 @@ function contextly_form_node_form_alter(&$form, FormStateInterface $form_state) 
       //    ->getSettings($node),
     ],
   );
-  //$form['contextly']['contextly_disabled'] = array(
-  //'#type' => 'checkbox',
-    //'#disabled' => !$has_access,
-    //'#title' => t('Disable the recommendation module and all sidebars on this node'),
-    //'#default_value' => !empty($node->contextly_disabled),
-  //);
+  $form['contextly']['contextly_disabled'] = array(
+  '#type' => 'checkbox',
+    '#disabled' => !$has_access,
+    '#title' => t('Disable the recommendation module and all sidebars on this node'),
+    '#default_value' => !empty($node->contextly_disabled),
+  );
+
+  $form['contextly']['contextly_snippet_edit'] = array(
+    '#theme' => 'contextly_node_edit',
+  );
 
   // Stop at this point if user has no access.
   //if (!$has_access) {
@@ -180,19 +186,4 @@ function contextly_form_node_form_alter(&$form, FormStateInterface $form_state) 
   $form['#attached']['library'][] = 'contextly/editor';
   $form['#attached']['drupalSettings'] = $base_service->getSettings($node);
 
-  if (!empty($form['actions']['#weight'])) {
-    $weight = $form['actions']['#weight'];
-  }
-  else {
-    $weight = element_info_property('actions', '#weight', 100);
-    if (!$weight) {
-      $weight = 100;
-    }
-  }
-  $weight -= 0.001;
-
-  $form['contextly_snippet_edit'] = array(
-    '#theme' => 'contextly_node_edit',
-    '#weight' => $weight,
-  );
 }
