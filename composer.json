@@ -19,7 +19,7 @@
         "version": "0.1.0",
         "type": "drupal-library",
         "dist": {
-          "url": "https://contextlysitescripts.contextly.com/kit/releases/contextly-kit-2.7.tar.gz",
+          "url": "https://assets.context.ly/archives/kit/contextly-kit-5.latest.tar.gz",
           "type": "tar"
         },
         "autoload": {

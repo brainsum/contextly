@@ -39,7 +39,7 @@ Install the contextly module as you would normally install a contributed Drupal
 module. Visit https://www.drupal.org/node/1897420 for further information.
 
 Drupal 8.x-2.x with composer:
-1. Add this code to repositories section to Drupal root composer.json:
+Add this code to repositories section to Drupal root composer.json:
 ```json
        {
             "type": "package",
@@ -48,21 +48,23 @@ Drupal 8.x-2.x with composer:
                  "version": "0.1.0",
                  "type": "drupal-library",
                  "dist": {
-                      "url": "http://contextlysitescripts.contextly.com/kit/releases/contextly-kit-2.7.tar.gz",
+                      "url": "https://assets.context.ly/archives/kit/contextly-kit-5.latest.tar.gz",
                       "type": "tar"
                  },
                  "autoload": {
-                      "classmap": ["server/"]
+                      "classmap": [
+                              "server/",
+                              "server/includes/",
+                              "server/includes/assets/",
+                              "server/includes/package/"
+                      ]
                  }
             }
         }
 ```
 
-2. Add secure http disable to config section to Drupal root composer.json:
-```json
-    "secure-http": false
-```
-3. Run composer command: composer require brainsum/contextly
+Run composer command:
+composer require brainsum/contextly
 
 CONFIGURATION
 --------------
