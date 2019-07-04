@@ -80,11 +80,11 @@ class ContextlyWidgetBlock extends BlockBase implements ContainerFactoryPluginIn
    */
   public function access(AccountInterface $account,
     $return_as_object = FALSE) {
-    $route_match = \Drupal::service('current_route_match');
+    $route_match = $this->container->get('current_route_match');
     if ($route_match->getRouteName() === 'entity.node.canonical' &&
       $node = $route_match->getParameter('node')) {
       /** @var \Drupal\contextly\ContextlyBaseServiceInterface $base_service */
-      $base_service = \Drupal::service('contextly.base');
+      $base_service = $this->container->get('contextly.base');
       if ($base_service->nodeContextlyIsDisabled($node)) {
         // Node has not access to contextly.
         return AccessResult::forbidden();
