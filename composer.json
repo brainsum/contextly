@@ -23,7 +23,12 @@
           "type": "tar"
         },
         "autoload": {
-          "classmap": ["server/"]
+          "classmap": [
+            "server/",
+            "server/includes/",
+            "server/includes/assets/",
+            "server/includes/package/"
+          ]
         }
       }
     }
