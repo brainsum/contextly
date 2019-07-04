@@ -9,7 +9,7 @@ use ContextlyKitApiResponse;
 use ContextlyKitBase;
 use ContextlyKitApiSessionInterface;
 use ContextlyKitException;
-use ContextlyKitAssetsList;
+use ContextlyKitAssetsPackage;
 use ContextlyKitAssetsRenderer;
 use ContextlyKitApiRequest;
 use Drupal\Core\Entity\EntityInterface;
@@ -352,7 +352,7 @@ class ContextlyDrupalApiSessionShared extends ContextlyKitBase implements Contex
 
 }
 
-class ContextlyDrupalAssetsList extends ContextlyKitAssetsList {
+class ContextlyDrupalAssetsList extends ContextlyKitAssetsPackage {
 
   function buildCssPaths() {
     $css = $this->getCss();
