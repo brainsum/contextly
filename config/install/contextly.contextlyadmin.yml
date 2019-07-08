@@ -1,4 +1,3 @@
 contextly:
   api_key: ""
-  contextly_kit_cdn: 1
   server_mode: "dev"

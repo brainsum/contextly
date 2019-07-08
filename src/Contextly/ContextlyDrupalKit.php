@@ -56,7 +56,7 @@ class ContextlyDrupalKit extends ContextlyKit {
     $config = new ContextlyKitSettings();
     $drupal_config = \Drupal::service('config.factory')
       ->get('contextly.settings');
-    $config->cdn = (bool) $drupal_config->get('kit_cdn');
+    $config->cdn = FALSE;
     $config->mode = $drupal_config->get('server_mode');
 
     $key = \Drupal::service('contextly.base')->getApiKey();
