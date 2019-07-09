@@ -75,12 +75,6 @@ class ContextlyAdminForm extends ConfigFormBase implements ContainerAwareInterfa
       '#default_value' => $key,
     ];
 
-    $form['module']['kit_cdn'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Load Kit resources from the Contextly CDN'),
-      '#default_value' => $config->get('kit_cdn'),
-    ];
-
     $form['module']['server_mode'] = [
       '#type' => 'select',
       '#title' => $this->t('Server mode'),
@@ -134,7 +128,6 @@ class ContextlyAdminForm extends ConfigFormBase implements ContainerAwareInterfa
         parent::submitForm($form, $form_state);
         $this->config('contextly.settings')
           ->set('api_key', $form_state->getValue('api_key'))
-          ->set('kit_cdn', $form_state->getValue('kit_cdn'))
           ->set('server_mode', $form_state->getValue('server_mode'))
           ->save();
 
