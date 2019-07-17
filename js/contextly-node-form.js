@@ -117,8 +117,7 @@
         });
       }));
 
-      var containers = $('.d-ctx-snippet-edit', context)
-        .once('d-ctx-snippet-edit');
+      var containers = $('.d-ctx-snippet-edit');
       if (containers.length) {
         this.addContainers(containers);
       }
